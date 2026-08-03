@@ -1,9 +1,11 @@
 package com.missa.bank.security.application.usecase;
 
 import com.missa.bank.customer.domain.exception.CustomerNotFoundException;
+import com.missa.bank.customer.domain.model.Customer;
 import com.missa.bank.customer.domain.repository.CustomerRepository;
 import com.missa.bank.security.api.request.RegisterUserRequest;
 import com.missa.bank.security.api.response.RegisterUserResponse;
+import com.missa.bank.security.domain.exception.CustomerAlreadyHasUserException;
 import com.missa.bank.security.domain.exception.InvalidUsernameException;
 import com.missa.bank.security.domain.model.User;
 import com.missa.bank.security.domain.repository.UserRepository;
@@ -14,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,9 +39,17 @@ public class RegisterUserUseCase {
         }
 
         if (request.role().equals(Role.CUSTOMER)) {
-            customerRepository.findById(request.customerId()).orElseThrow(
-                    () -> new CustomerNotFoundException("Customer ID not found")
-            );
+            Customer customer = customerRepository
+                    .findById(request.customerId())
+                    .orElseThrow(
+                            () -> new CustomerNotFoundException(
+                                    "Customer not found"
+                            )
+                    );
+
+            if (repository.existsByCustomerId(customer.getId())) {
+                throw new CustomerAlreadyHasUserException("Customer already has a user");
+            }
         }
 
         Long customerId = request.role().equals(Role.ADMIN) ? null : request.customerId();

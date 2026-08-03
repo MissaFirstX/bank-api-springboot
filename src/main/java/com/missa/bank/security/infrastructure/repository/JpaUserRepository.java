@@ -34,6 +34,11 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
+    public boolean existsByCustomerId(Long customerId) {
+        return repository.existsByCustomerId(customerId);
+    }
+
+    @Override
     public Optional<User> findById(Long id) {
         return repository.findById(id)
                 .map(mapper::toDomain);

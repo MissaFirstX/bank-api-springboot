@@ -40,15 +40,6 @@ public record Clabe(String clabe) {
         // 4. Calculamos el dígito verificador matemático oficial
         int digitoVerificador = calcularDigitoVerificador(primeros17);
 
-        System.out.println(cuenta);
-        System.out.println(cuenta.length());
-
-        System.out.println(primeros17);
-        System.out.println(primeros17.length());
-
-        System.out.println(primeros17 + digitoVerificador);
-        System.out.println((primeros17 + digitoVerificador).length());
-
         // 5. Retornamos la instancia completa de 18 dígitos
         return new Clabe(primeros17 + digitoVerificador);
     }

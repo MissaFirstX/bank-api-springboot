@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Component
 public class AccountMapper {
     public AccountEntity toEntity(Account account) {
-        System.out.println(account.getClabe().clabe());
 
         return new AccountEntity(
                 account.getId(),

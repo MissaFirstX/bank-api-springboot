@@ -11,5 +11,7 @@ public interface UserRepository {
 
     boolean existsByUsername(String username);
 
+    boolean existsByCustomerId(Long customerId);
+
     Optional<User> findById(Long id);
 }
